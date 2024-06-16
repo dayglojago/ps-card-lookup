@@ -13,36 +13,36 @@ struct Pullscription_Card_LookupApp: App {
         WindowGroup {
             MainAppView()
         }
-        .commands {
-            CommandMenu("File") {
-                Button(action: {
-                    // Action for new file
-                }) {
-                    Text("New File")
-                }
-                Button(action: {
-                    // Action for open file
-                }) {
-                    Text("Open File")
-                }
-                Button(action: {
-                    // Action for save file
-                }) {
-                    Text("Save File")
-                }
-            }
-            CommandMenu("Edit") {
-                Button(action: {
-                    // Action for undo
-                }) {
-                    Text("Undo")
-                }
-                Button(action: {
-                    // Action for redo
-                }) {
-                    Text("Redo")
-                }
-            }
-        }
+//        .commands {
+//            CommandMenu("File") {
+//                Button(action: {
+//                    // Action for new file
+//                }) {
+//                    Text("New File")
+//                }
+//                Button(action: {
+//                    // Action for open file
+//                }) {
+//                    Text("Open File")
+//                }
+//                Button(action: {
+//                    // Action for save file
+//                }) {
+//                    Text("Save File")
+//                }
+//            }
+//            CommandMenu("Edit") {
+//                Button(action: {
+//                    // Action for undo
+//                }) {
+//                    Text("Undo")
+//                }
+//                Button(action: {
+//                    // Action for redo
+//                }) {
+//                    Text("Redo")
+//                }
+//            }
+//        }
     }
 }

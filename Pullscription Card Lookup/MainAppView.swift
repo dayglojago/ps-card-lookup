@@ -17,6 +17,17 @@ let modelLogger = Logger.init(
     category: "picklist.debugging"
 )
 
+extension String {
+    func convertToPlainText() -> String {
+        let attributedString = try? NSAttributedString(
+            data: Data(self.utf8),
+            options: [.documentType: NSAttributedString.DocumentType.plain],
+            documentAttributes: nil
+        )
+        return attributedString?.string ?? self
+    }
+}
+
 // Model to hold card information
 struct Card: Identifiable {
     let id = UUID()
@@ -76,34 +87,59 @@ enum NetworkError: Error {
 //    }
 //    
 //}
-
-
-class PrintTextView: NSView {
-    var text: String
+func listFiles(at path: String) {
     
-    init(text: String) {
-        self.text = text
-        super.init(frame: .zero)
+    let fileManager = FileManager.default
+    do {
+        let files = try fileManager.contentsOfDirectory(atPath: NSTemporaryDirectory())
+        for file in files {
+            print(file)
+        }
+    } catch {
+        print("Error: \(error.localizedDescription)")
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
+}
+func writeAndPrintFile(text: String) {
+    let text = text
+    let filePath = FileManager.default.temporaryDirectory.appendingPathComponent("print/tmp_\(UUID()).txt")
+    let dirPath = FileManager.default.temporaryDirectory.appendingPathComponent("print/")
+    let filePathString = filePath.absoluteString
+    print("File Path String: \(filePathString)")
+    do {
+        Task {
+        if !FileManager.default.fileExists(atPath: filePathString) {
+            try FileManager.default.createDirectory(at: dirPath, withIntermediateDirectories: true)
+            FileManager.default.createFile(atPath: filePathString, contents: nil, attributes: nil)
+            
+            
+            }
         
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: 12),
-            .paragraphStyle: NSMutableParagraphStyle()
-        ]
+            try text.write(toFile: filePathString, atomically: true, encoding: .utf8)
+            modelLogger.log("File created!")
+        }
+        listFiles(at: dirPath.absoluteString)
         
-        let attributedString = NSAttributedString(string: text, attributes: attributes)
-        attributedString.draw(in: dirtyRect)
-    }
-    
-    override var isFlipped: Bool {
-        return true
+        // AppleScript to print the file using Finder
+        let script = """
+            tell application "TextEdit"
+                activate
+                open POSIX file "\(filePathString)"
+                delay 1
+                print document 1
+                delay 1
+                close document 1 saving no
+            end tell
+        """
+        
+        var error: NSDictionary?
+        if let scriptObject = NSAppleScript(source: script) {
+            scriptObject.executeAndReturnError(&error)
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
+    } catch {
+        print("Error writing to file: \(error)")
     }
 }
 
@@ -176,25 +212,8 @@ func fetchSetCodeList() async throws -> [ScryfallSet] {
     
     return setsData.data
 }
-
-func matchesWordPlusPattern(for specialCardType: String, cardName input: String) -> Bool {
-    // Define the regular expression pattern
-    let pattern = "\\("+input+".*\\)"
-    
-    do {
-        // Create the regular expression
-        let regex = try NSRegularExpression(pattern: pattern)
-        
-        // Check if there's a match
-        let range = NSRange(location: 0, length: input.utf16.count)
-        let match = regex.firstMatch(in: input, options: [], range: range)
-        
-        // Return true if there's a match, false otherwise
-        return match != nil
-    } catch {
-        print("Invalid regex: \(error.localizedDescription)")
-        return false
-    }
+func isInteger(_ string: String) -> Bool {
+    return Int(string.trimmingCharacters(in: .whitespacesAndNewlines)) != nil
 }
 
 func firstIndexStartingWith(prefix: String, in array: [String]) -> Int? {
@@ -207,6 +226,7 @@ class CardInfoViewModel: Identifiable {
     var date = getCurrentTimestamp()
     var customerName: String = ""
     var isLoading: Bool = false
+    var jobProcessed: Bool = false
     var inputText: String = ""
     var outputText: String = ""
     // need to insert into here when "process" is tapped
@@ -215,6 +235,7 @@ class CardInfoViewModel: Identifiable {
     var numberOfRares = 0
     var numberOfMythics = 0
     var numberOfOther = 0
+    var foundFirstCard = false
     
     public func clear(){
         self.id = UUID()
@@ -229,6 +250,8 @@ class CardInfoViewModel: Identifiable {
         self.numberOfRares = 0
         self.numberOfMythics = 0
         self.numberOfOther = 0
+        self.jobProcessed = false
+        self.foundFirstCard = false
     }
     
     init(isLoading: Bool = false, inputText: String, outputText: String = "",  numberOfCardsTotal: Double = 0.0, numberOfCardsProcessed: Double = 0.0, numberOfRares: Int = 0, numberOfMythics: Int = 0, numberOfOther: Int = 0) {
@@ -243,15 +266,33 @@ class CardInfoViewModel: Identifiable {
     }
     
     func processCardInfo() {
-        isLoading = true
+        
+        
         modelLogger.log("Inside processCardInfo function! InputsText:\n\(self.inputText)")
         let text = inputText
+        if(text == ""){
+            self.outputText = "Empty text submitted, please retry with actual input."
+            return
+        }
         let lines = text.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }
         var cards: [(Int, String, String, String)] = []
         
+        isLoading = true
+
         var i = 0
         while i < lines.count {
             let line = lines[i]
+            
+            if !isInteger(line) && !foundFirstCard{
+                i += 1
+                continue
+            }else{
+                print("Found first card")
+                foundFirstCard = true
+            }
+            if line.starts(with: "** "){
+                break
+            }
             if let quantity = Int(line) {
                 if i + 1 < lines.count {
                     let cardInfo = lines[i + 1]
@@ -270,8 +311,12 @@ class CardInfoViewModel: Identifiable {
                     i += 1
                 }
             }
+            
         }
-        numberOfCardsTotal = Double(cards.count)
+        let total = cards.reduce(0) { sum, card in
+            sum + card.0
+        }
+        numberOfCardsTotal = Double(total)
         Task {
             modelLogger.log("Here inside fetching card details!")
             await fetchCardDetails(for: cards)
@@ -418,10 +463,14 @@ class CardInfoViewModel: Identifiable {
                 erroredCards.append((quantity, setName, condition, "Unknown Error", cardName))
                 print(error)
             }
+            modelLogger.log("Processed++!")
             numberOfCardsProcessed += 1
         }
-        
+        modelLogger.log("Post-Processing!")
+        modelLogger.log("\(specialCards.count)")
+        modelLogger.log("\(specialCardFlag)")
         if(specialCardFlag){
+            modelLogger.log("Dealing with special cards!")
             var appendedCard: (Int, String, String, String, String, String)
             for (name, DFCName, set, types) in specialCards{
                 
@@ -454,13 +503,11 @@ class CardInfoViewModel: Identifiable {
                         cardDetails[index] = appendedCard
                     }
                 }
-                
             }
-            modelLogger.log("About to Generate Output!")
-            generateOutput(cardDetails: cardDetails, erroredCards: erroredCards)
-            
-            
-        }
+        } //end special card processing
+        modelLogger.log("At the end of special card processing!")
+        modelLogger.log("About to Generate Output!")
+        generateOutput(cardDetails: cardDetails, erroredCards: erroredCards)
     }
     
     private func fetchIndividualCardDetails(for cardName: String, setCode: String) async throws -> CardData? {
@@ -531,14 +578,14 @@ class CardInfoViewModel: Identifiable {
             if rarity == "Rare" || rarity == "Mythic" {
                 output["Mythics and Rares", default: []].append(cardInfo)
                 if rarity == "Rare"{
-                    numberOfRares+=1
+                    numberOfRares+=quantity
                 }
                 if rarity == "Mythic" {
-                    numberOfMythics+=1
+                    numberOfMythics+=quantity
                 }
                     
             } else {
-                numberOfOther+=1
+                numberOfOther+=quantity
                 output[setName, default: []].append(cardInfo)
             }
         }
@@ -560,6 +607,7 @@ class CardInfoViewModel: Identifiable {
         DispatchQueue.main.async {
             modelLogger.log("Basically done!")
             self.isLoading = false
+            self.jobProcessed = true
             self.outputText = result
         }
     }
@@ -571,22 +619,6 @@ func getCurrentTimestamp() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
     return formatter.string(from: date)
-}
-func printText(_ text: String) {
-    let printView = PrintTextView(text: text)
-    let printInfo = NSPrintInfo.shared
-    printInfo.horizontalPagination = .fit
-    printInfo.verticalPagination = .automatic
-    printInfo.isHorizontallyCentered = false
-    printInfo.isVerticallyCentered = false
-    printInfo.topMargin = 0
-    printInfo.leftMargin = 0
-    printInfo.rightMargin = 0
-    printInfo.bottomMargin = 0
-    
-    let printOperation = NSPrintOperation(view: printView, printInfo: printInfo)
-    printOperation.canSpawnSeparateThread = true
-    printOperation.run()
 }
 
 func copyToClipboard(text: String) {
@@ -625,6 +657,7 @@ struct CardFace: Codable {
 struct MainAppView: View {
     @Environment(\.managedObjectContext) private var viewContext
     //@Query(sort: \SavedSession.date) private var savedSessions: [SavedSession]
+    @State private var showPrinterAlert = false
     @State private var processingJob = CardInfoViewModel( inputText: "")
     // Define focus state for text fields
     @FocusState private var focusedField: Field?
@@ -665,6 +698,7 @@ struct MainAppView: View {
                             }
                             HStack{
                                 TextField("Customer Name", text: $processingJob.customerName)
+                                    
                             }
                             Text("Paste card data:")
                                 .font(.headline)
@@ -672,35 +706,64 @@ struct MainAppView: View {
                             TextEditor(text: $processingJob.inputText)
                                 .focused($focusedField, equals: .toBeProcessed)
                                 .border(Color.gray, width: 1)
+                                .onChange(of: processingJob.inputText) { newText in
+                                    processingJob.inputText = newText.convertToPlainText()
+                                }
                             
-                            if(processingJob.isLoading){
+                            if (processingJob.isLoading){
+                            HStack {
+                                Text("\(Int(processingJob.numberOfCardsProcessed))")
+                                    .font(.subheadline)
+                                    .bold()
+                                Text("/")
+                                    .font(.subheadline)
+                                Text("\(Int(processingJob.numberOfCardsTotal))")
+                                    .font(.subheadline)
+                                    .bold()
+                                
                                 ProgressView("Processing...", value: processingJob.numberOfCardsProcessed, total: processingJob.numberOfCardsTotal)
                                     .progressViewStyle(LinearProgressViewStyle())
+                            }
                             }else{
-                                HStack{
+                                HStack(){
                                     Button(action: {
                                         if(processingJob.customerName.isEmpty){
                                             processingJob.customerName = superheroNames.randomElement()!
                                         }
-                                        print("Pressed button!")
+                                        
                                         processingJob.processCardInfo()
                                     }) {
                                         HStack {
                                             Image(systemName: "checkmark.shield.fill") // SF Symbol
+                                                .font(.title)
                                                 .foregroundColor(.green)
+                                                .padding(.leading)
                                             Text("Process List")
+                                                .padding([.top, .trailing, .bottom])
+                                                .bold()
                                         }
                                     }
+                                    .disabled(processingJob.jobProcessed)
+                                    
                                     Button(action: {
                                         processingJob.inputText = ""
                                     }) {
                                         HStack {
                                             Image(systemName: "clear.fill")
+                                                .font(.title)
                                                 .foregroundColor(.orange)
+                                                .padding(.leading)
                                             Text("Clear")
+                                                .padding([.top, .trailing, .bottom])
+                                                .bold()
                                         }
                                     }
+                                    .disabled(processingJob.jobProcessed)
+                                    HStack{
+                                        processingJob.jobProcessed ? Text("Start New Job to Process New Cards ↘").font(.caption2).padding() : Text("").padding()
+                                    }
                                 }
+                                
                             }
                             Divider()
                             HStack{
@@ -719,22 +782,41 @@ struct MainAppView: View {
                             
                             HStack{
                                 Button(action: {
-                                    let printer = Printer.shared
-                                    try? printer.print(.string(processingJob.outputText))
+                                    showPrinterAlert = true
+                                    
                                 }) {
                                     HStack {
-                                        Image(systemName: "printer.filled.and.paper") // SF Symbol
+                                        Image(systemName: "printer.filled.and.paper") .font(.title)
                                             .foregroundColor(.gray)
+                                            .padding(.leading)
                                         Text("Print Pick List")
+                                            .padding([.top, .trailing, .bottom])
+                                            .bold()
+                                        
                                     }
                                 }
+                                .alert("Printing is Unreliable", isPresented: $showPrinterAlert) {
+                                                Button("Print Anyway") { try? printer.print(.string(processingJob.outputText)) }
+                                    /*Button("Print Alternate Way") {
+                                        writeAndPrintFile(text: processingJob.outputText)
+                                    }*/
+                                    Button("Cancel") {}
+                                        .foregroundColor(.red)
+                                            } message: {
+                                                Text("Printing currently gets cut off after about 40 cards. For larger lists, Copy the text and print from TextEdit.")
+                                            }
                                 
                                 Button(action: {
                                     copyToClipboard(text: processingJob.outputText)
                                 }) {
                                     HStack {
-                                        Image(systemName: "doc.on.doc.fill") .foregroundColor(.blue)
+                                        Image(systemName: "doc.on.doc.fill") 
+                                            .font(.title)
+                                            .foregroundColor(.blue)
+                                            .padding(.leading)
                                         Text("Copy")
+                                            .padding([.top, .trailing, .bottom])
+                                            .bold()
                                     }
                                 }
                                 
@@ -748,19 +830,26 @@ struct MainAppView: View {
                             Spacer()
                             
                             Button(action: {
-                                //let sessionToBeSaved = SavedSession(name: processingJob.customerName, processedCardListText: processingJob.outputText, date: processingJob.date, inputText: processingJob.inputText, numberOfCardsTotal: Int(processingJob.numberOfCardsTotal), context: viewContext)
-                                //viewContext.insert(sessionToBeSaved)
                                 processingJob.clear()
+                                /*
+                                let sessionToBeSaved = SavedSession(name: processingJob.customerName, processedCardListText: processingJob.outputText, date: processingJob.date, inputText: processingJob.inputText, numberOfCardsTotal: Int(processingJob.numberOfCardsTotal), context: viewContext)
+                                viewContext.insert(sessionToBeSaved)
+                                
                                 do {
-                                            try viewContext.save()
+                                            //try viewContext.save()
                                         } catch {
                                             print("Error saving session: \(error)")
                                         }
+                                */
                             }) {
                                 HStack {
-                                    Image(systemName: "doc.fill.badge.plus") // SF Symbol
+                                    Image(systemName: "doc.fill.badge.plus")
+                                        .font(.title)
+                                        .padding(.leading)
                                     
                                     Text("New Job")
+                                        .padding([.top, .trailing, .bottom])
+                                        .bold()
                                 }
                             }
                         }
@@ -768,56 +857,56 @@ struct MainAppView: View {
                     }.padding()
                     
                 }
-                VStack(alignment: .leading){
-                    
-                    Text("History:")
-                        .font(.headline)
-                        .padding(.bottom, 0)
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("Date")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text("Name/First Card")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text("Total Qty")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-                        .padding(5)
-                        .background(Color.gray.opacity(0.2))
-                        .frame(maxHeight: 25)
-                        .bold()
-                        Text("History Coming Soon")
-//                        List(savedSessions, id: \.date) { session in
-//                            HStack {
-//                                Text(session.date)
-//                                    .frame(maxWidth: .infinity, alignment: .leading)
-//                                Text(session.name)
-//                                    .frame(maxWidth: .infinity, alignment: .leading)
-//                                Text(String(session.numberOfCardsTotal))
-//                                    .frame(maxWidth: .infinity, alignment: .leading)
-//                            }
+//                VStack(alignment: .leading){
+//                    
+//                    Text("History:")
+//                        .font(.headline)
+//                        .padding(.bottom, 0)
+//                    
+//                    VStack(alignment: .leading) {
+//                        HStack {
+//                            Text("Date")
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+//                            Text("Name/First Card")
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+//                            Text("Total Qty")
+//                                .frame(maxWidth: .infinity, alignment: .trailing)
 //                        }
-//                        .padding(.top, 0)
-//                        .listStyle(InsetListStyle())
-//                        .border(Color.gray, width: 1)
-                        HStack(){
-                            Spacer()
-                            Button(action: {
-                                processingJob.inputText = ""
-                            }) {
-                                HStack {
-                                    Image(systemName: "clear.fill") // SF Symbol
-                                        .foregroundColor(.red)
-                                        .padding(.trailing, 0)
-                                    Text("Delete History")
-                                        .padding(.leading, 0)
-                                }
-                            }
-                            .disabled(true)
-                        }
-                    }
-                }
+//                        .padding(5)
+//                        .background(Color.gray.opacity(0.2))
+//                        .frame(maxHeight: 25)
+//                        .bold()
+//                        Text("History Coming Soon")
+////                        List(savedSessions, id: \.date) { session in
+////                            HStack {
+////                                Text(session.date)
+////                                    .frame(maxWidth: .infinity, alignment: .leading)
+////                                Text(session.name)
+////                                    .frame(maxWidth: .infinity, alignment: .leading)
+////                                Text(String(session.numberOfCardsTotal))
+////                                    .frame(maxWidth: .infinity, alignment: .leading)
+////                            }
+////                        }
+////                        .padding(.top, 0)
+////                        .listStyle(InsetListStyle())
+////                        .border(Color.gray, width: 1)
+//                        HStack(){
+//                            Spacer()
+//                            Button(action: {
+//                                processingJob.inputText = ""
+//                            }) {
+//                                HStack {
+//                                    Image(systemName: "clear.fill") // SF Symbol
+//                                        .foregroundColor(.red)
+//                                        .padding(.trailing, 0)
+//                                    Text("Delete History")
+//                                        .padding(.leading, 0)
+//                                }
+//                            }
+//                            .disabled(true)
+//                        }
+//                    }
+//                }
             }
             .padding(.top, 0)
             .padding(.bottom)
@@ -825,7 +914,7 @@ struct MainAppView: View {
             
         }
         .padding(.bottom, 0)
-        .frame(minWidth: 800, minHeight: 700)
+        .frame(minWidth: 600, minHeight: 850)
         .onAppear(){
             focusedField = .toBeProcessed
             Task{
