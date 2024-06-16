@@ -8,15 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		4914E29A2C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914E2992C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift */; };
-		4914E29C2C1AE4E100B370F4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914E29B2C1AE4E100B370F4 /* ContentView.swift */; };
+		4914E29C2C1AE4E100B370F4 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914E29B2C1AE4E100B370F4 /* MainAppView.swift */; };
 		4914E29E2C1AE4E300B370F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		4914E2A12C1AE4E300B370F4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */; };
+		494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 494E59A02C1E14F10014C288 /* PrintingKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4914E2962C1AE4E100B370F4 /* Pullscription Card Lookup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pullscription Card Lookup.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4914E2992C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pullscription_Card_LookupApp.swift; sourceTree = "<group>"; };
-		4914E29B2C1AE4E100B370F4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4914E29B2C1AE4E100B370F4 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		4914E29D2C1AE4E300B370F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4914E2A22C1AE4E300B370F4 /* Pullscription_Card_Lookup.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pullscription_Card_Lookup.entitlements; sourceTree = "<group>"; };
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				4914E2992C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift */,
-				4914E29B2C1AE4E100B370F4 /* ContentView.swift */,
+				4914E29B2C1AE4E100B370F4 /* MainAppView.swift */,
 				4914E29D2C1AE4E300B370F4 /* Assets.xcassets */,
 				4914E2A22C1AE4E300B370F4 /* Pullscription_Card_Lookup.entitlements */,
 				4914E29F2C1AE4E300B370F4 /* Preview Content */,
@@ -85,6 +87,9 @@
 			dependencies = (
 			);
 			name = "Pullscription Card Lookup";
+			packageProductDependencies = (
+				494E59A02C1E14F10014C288 /* PrintingKit */,
+			);
 			productName = "Pullscription Card Lookup";
 			productReference = 4914E2962C1AE4E100B370F4 /* Pullscription Card Lookup.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +118,9 @@
 				Base,
 			);
 			mainGroup = 4914E28D2C1AE4E100B370F4;
+			packageReferences = (
+				494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */,
+			);
 			productRefGroup = 4914E2972C1AE4E100B370F4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -139,7 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4914E29C2C1AE4E100B370F4 /* ContentView.swift in Sources */,
+				4914E29C2C1AE4E100B370F4 /* MainAppView.swift in Sources */,
 				4914E29A2C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,6 +215,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -262,6 +271,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -270,22 +280,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Pullscription Card Lookup/Pullscription_Card_Lookup.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pullscription Card Lookup/Preview Content\"";
-				DEVELOPMENT_TEAM = G6NVL3G3XS;
+				DEVELOPMENT_TEAM = W782CH3TBJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription™ Card Lookup";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pullscription.picklist.Pullscription-Card-Lookup";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pullscription.picklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -297,22 +310,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Pullscription Card Lookup/Pullscription_Card_Lookup.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pullscription Card Lookup/Preview Content\"";
-				DEVELOPMENT_TEAM = G6NVL3G3XS;
+				DEVELOPMENT_TEAM = W782CH3TBJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription™ Card Lookup";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pullscription.picklist.Pullscription-Card-Lookup";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pullscription.picklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -341,6 +357,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/PrintingKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		494E59A02C1E14F10014C288 /* PrintingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */;
+			productName = PrintingKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4914E28E2C1AE4E100B370F4 /* Project object */;
 }

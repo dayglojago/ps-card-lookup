@@ -1,0 +1,62 @@
+{
+  "images" : [
+    {
+      "filename" : "RETAILERTOOLS_PULLSCRIPTION.png",
+      "idiom" : "mac",
+      "scale" : "1x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
+      "filename" : "RETAILERTOOLS_PULLSCRIPTION 2.png",
+      "idiom" : "mac",
+      "scale" : "1x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "RETAILERTOOLS_PULLSCRIPTION_darkmode_logo 1.png",
+      "idiom" : "mac",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "RETAILERTOOLS_PULLSCRIPTION 1.png",
+      "idiom" : "mac",
+      "scale" : "2x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
+      "filename" : "RETAILERTOOLS_PULLSCRIPTION 3.png",
+      "idiom" : "mac",
+      "scale" : "2x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "RETAILERTOOLS_PULLSCRIPTION_darkmode_logo.png",
+      "idiom" : "mac",
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
