@@ -220,6 +220,12 @@ func firstIndexStartingWith(prefix: String, in array: [String]) -> Int? {
     return array.firstIndex { $0.hasPrefix(prefix) }
 }
 
+extension Bundle {
+    var versionNumber: String {
+        return infoDictionary?["CFBundleShortVersionString"] as! String
+    }
+}
+
 @Observable
 class CardInfoViewModel: Identifiable {
     var id = UUID()
@@ -677,10 +683,14 @@ struct MainAppView: View {
             Image("PSToolsLogo")
                 .padding(.top)
                 .padding(.bottom, 0)
-            Text("Pullscription™ Magic :The Gathering Card Pick List Generator")
-                .font(.title2)
-                .bold()
-                .padding(.bottom, 0)
+            HStack(alignment: .lastTextBaseline){
+                Text("Pullscription™ Magic :The Gathering Card Pick List Generator")
+                    .font(.title2)
+                    .bold()
+                    .padding(.bottom, 0)
+                Text("v. \(Bundle.main.versionNumber)")
+                    .font(.caption)
+            }
             HStack(alignment: .firstTextBaseline){
                 VStack{
                     

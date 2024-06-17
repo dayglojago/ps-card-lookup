@@ -12,6 +12,8 @@
 		4914E29E2C1AE4E300B370F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		4914E2A12C1AE4E300B370F4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */; };
 		494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 494E59A02C1E14F10014C288 /* PrintingKit */; };
+		49C643822C1FB4E5005153DB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 49C643812C1FB4E5005153DB /* Sparkle */; };
+		49C643852C1FBC00005153DB /* CheckForUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C643842C1FBC00005153DB /* CheckForUpdates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,8 @@
 		4914E29D2C1AE4E300B370F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4914E2A22C1AE4E300B370F4 /* Pullscription_Card_Lookup.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pullscription_Card_Lookup.entitlements; sourceTree = "<group>"; };
+		49C643832C1FB770005153DB /* Pullscription-Card-Lookup-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Pullscription-Card-Lookup-Info.plist"; sourceTree = SOURCE_ROOT; };
+		49C643842C1FBC00005153DB /* CheckForUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */,
+				49C643822C1FB4E5005153DB /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,8 +59,10 @@
 		4914E2982C1AE4E100B370F4 /* Pullscription Card Lookup */ = {
 			isa = PBXGroup;
 			children = (
+				49C643832C1FB770005153DB /* Pullscription-Card-Lookup-Info.plist */,
 				4914E2992C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift */,
 				4914E29B2C1AE4E100B370F4 /* MainAppView.swift */,
+				49C643842C1FBC00005153DB /* CheckForUpdates.swift */,
 				4914E29D2C1AE4E300B370F4 /* Assets.xcassets */,
 				4914E2A22C1AE4E300B370F4 /* Pullscription_Card_Lookup.entitlements */,
 				4914E29F2C1AE4E300B370F4 /* Preview Content */,
@@ -89,6 +96,7 @@
 			name = "Pullscription Card Lookup";
 			packageProductDependencies = (
 				494E59A02C1E14F10014C288 /* PrintingKit */,
+				49C643812C1FB4E5005153DB /* Sparkle */,
 			);
 			productName = "Pullscription Card Lookup";
 			productReference = 4914E2962C1AE4E100B370F4 /* Pullscription Card Lookup.app */;
@@ -120,6 +128,7 @@
 			mainGroup = 4914E28D2C1AE4E100B370F4;
 			packageReferences = (
 				494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */,
+				49C643802C1FB4E5005153DB /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 4914E2972C1AE4E100B370F4 /* Products */;
 			projectDirPath = "";
@@ -148,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4914E29C2C1AE4E100B370F4 /* MainAppView.swift in Sources */,
+				49C643852C1FBC00005153DB /* CheckForUpdates.swift in Sources */,
 				4914E29A2C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,12 +294,13 @@
 				CODE_SIGN_ENTITLEMENTS = "Pullscription Card Lookup/Pullscription_Card_Lookup.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Pullscription Card Lookup/Preview Content\"";
 				DEVELOPMENT_TEAM = W782CH3TBJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pullscription-Card-Lookup-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription™ Card Lookup";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -297,7 +308,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pullscription.picklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -314,12 +325,13 @@
 				CODE_SIGN_ENTITLEMENTS = "Pullscription Card Lookup/Pullscription_Card_Lookup.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Pullscription Card Lookup/Preview Content\"";
 				DEVELOPMENT_TEAM = W782CH3TBJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pullscription-Card-Lookup-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription™ Card Lookup";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -327,7 +339,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pullscription.picklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -367,6 +379,14 @@
 				minimumVersion = 0.5.2;
 			};
 		};
+		49C643802C1FB4E5005153DB /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -374,6 +394,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */;
 			productName = PrintingKit;
+		};
+		49C643812C1FB4E5005153DB /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49C643802C1FB4E5005153DB /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
