@@ -25,6 +25,7 @@
 		4914E2A22C1AE4E300B370F4 /* Pullscription_Card_Lookup.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pullscription_Card_Lookup.entitlements; sourceTree = "<group>"; };
 		49C643832C1FB770005153DB /* Pullscription-Card-Lookup-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Pullscription-Card-Lookup-Info.plist"; sourceTree = SOURCE_ROOT; };
 		49C643842C1FBC00005153DB /* CheckForUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdates.swift; sourceTree = "<group>"; };
+		49C643862C202E71005153DB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +60,7 @@
 		4914E2982C1AE4E100B370F4 /* Pullscription Card Lookup */ = {
 			isa = PBXGroup;
 			children = (
+				49C643862C202E71005153DB /* .gitignore */,
 				49C643832C1FB770005153DB /* Pullscription-Card-Lookup-Info.plist */,
 				4914E2992C1AE4E100B370F4 /* Pullscription_Card_LookupApp.swift */,
 				4914E29B2C1AE4E100B370F4 /* MainAppView.swift */,
