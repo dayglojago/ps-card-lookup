@@ -792,8 +792,8 @@ struct MainAppView: View {
                             
                             HStack{
                                 Button(action: {
-                                    showPrinterAlert = true
-                                    
+                                    //showPrinterAlert = true
+                                    try? printer.print(.string(processingJob.outputText))
                                 }) {
                                     HStack {
                                         Image(systemName: "printer.filled.and.paper") .font(.title)
@@ -805,7 +805,7 @@ struct MainAppView: View {
                                         
                                     }
                                 }
-                                .alert("Printing is Unreliable", isPresented: $showPrinterAlert) {
+                                /*.alert("Printing is Unreliable", isPresented: $showPrinterAlert) {
                                                 Button("Print Anyway") { try? printer.print(.string(processingJob.outputText)) }
                                     /*Button("Print Alternate Way") {
                                         writeAndPrintFile(text: processingJob.outputText)
@@ -814,7 +814,7 @@ struct MainAppView: View {
                                         .foregroundColor(.red)
                                             } message: {
                                                 Text("Printing currently gets cut off after about 40 cards. For larger lists, Copy the text and print from TextEdit.")
-                                            }
+                                            }*/
                                 
                                 Button(action: {
                                     copyToClipboard(text: processingJob.outputText)
