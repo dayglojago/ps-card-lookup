@@ -323,9 +323,10 @@ class CardInfoViewModel: Identifiable {
             sum + card.0
         }
         numberOfCardsTotal = Double(total)
+        let cardsToSend = cards
         Task {
             modelLogger.log("Here inside fetching card details!")
-            await fetchCardDetails(for: cards)
+            await fetchCardDetails(for: cardsToSend)
         }
     }
     
@@ -675,14 +676,17 @@ struct MainAppView: View {
     }
 
     @State private var selectedItems: [UUID] = []
-    let printer = Printer.shared
+    
     
     var body: some View {
         
         VStack{
             Image("PSToolsLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
                 .padding(.top)
                 .padding(.bottom, 0)
+                .frame(maxWidth: 500)
             HStack(alignment: .lastTextBaseline){
                 Text("Pullscription™ Magic :The Gathering Card Pick List Generator")
                     .font(.title2)
@@ -793,6 +797,7 @@ struct MainAppView: View {
                             HStack{
                                 Button(action: {
                                     //showPrinterAlert = true
+                                    let printer = Printer.shared
                                     try? printer.print(.string(processingJob.outputText))
                                 }) {
                                     HStack {
