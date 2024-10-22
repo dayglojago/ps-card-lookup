@@ -294,21 +294,21 @@
 				CODE_SIGN_ENTITLEMENTS = "Pullscription Card Lookup/Pullscription_Card_Lookup.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pullscription Card Lookup/Preview Content\"";
 				DEVELOPMENT_TEAM = W782CH3TBJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pullscription-Card-Lookup-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription™ Card Lookup";
+				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription Card Lookup";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pullscription.picklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -325,21 +325,21 @@
 				CODE_SIGN_ENTITLEMENTS = "Pullscription Card Lookup/Pullscription_Card_Lookup.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Pullscription Card Lookup/Preview Content\"";
 				DEVELOPMENT_TEAM = W782CH3TBJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pullscription-Card-Lookup-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription™ Card Lookup";
+				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription Card Lookup";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pullscription.picklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

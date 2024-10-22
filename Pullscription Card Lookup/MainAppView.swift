@@ -11,6 +11,7 @@ import AppKit
 import SwiftData
 import OSLog
 import Foundation
+import CoreGraphics
 
 let modelLogger = Logger.init(
     subsystem: "com.picklist.models",
@@ -87,61 +88,6 @@ enum NetworkError: Error {
 //    }
 //    
 //}
-func listFiles(at path: String) {
-    
-    let fileManager = FileManager.default
-    do {
-        let files = try fileManager.contentsOfDirectory(atPath: NSTemporaryDirectory())
-        for file in files {
-            print(file)
-        }
-    } catch {
-        print("Error: \(error.localizedDescription)")
-    }
-}
-func writeAndPrintFile(text: String) {
-    let text = text
-    let filePath = FileManager.default.temporaryDirectory.appendingPathComponent("print/tmp_\(UUID()).txt")
-    let dirPath = FileManager.default.temporaryDirectory.appendingPathComponent("print/")
-    let filePathString = filePath.absoluteString
-    print("File Path String: \(filePathString)")
-    do {
-        Task {
-        if !FileManager.default.fileExists(atPath: filePathString) {
-            try FileManager.default.createDirectory(at: dirPath, withIntermediateDirectories: true)
-            FileManager.default.createFile(atPath: filePathString, contents: nil, attributes: nil)
-            
-            
-            }
-        
-            try text.write(toFile: filePathString, atomically: true, encoding: .utf8)
-            modelLogger.log("File created!")
-        }
-        listFiles(at: dirPath.absoluteString)
-        
-        // AppleScript to print the file using Finder
-        let script = """
-            tell application "TextEdit"
-                activate
-                open POSIX file "\(filePathString)"
-                delay 1
-                print document 1
-                delay 1
-                close document 1 saving no
-            end tell
-        """
-        
-        var error: NSDictionary?
-        if let scriptObject = NSAppleScript(source: script) {
-            scriptObject.executeAndReturnError(&error)
-            if let error = error {
-                print("Error: \(error)")
-            }
-        }
-    } catch {
-        print("Error writing to file: \(error)")
-    }
-}
 
 let superheroNames = [
     "Superman",
@@ -197,6 +143,55 @@ let superheroNames = [
 ]
 
 var globalSetsData: [ScryfallSet] = []
+
+let pageConfig = Pdf.PageConfiguration(
+    pageSize: CGSize(width: 200, height: 6000),
+    pageMargins: Pdf.PageMargins(all: 4)
+)
+
+//
+//func generatePDF(text: String) -> Data {
+//    // Custom configuration: 6000pt height, 200pt top margin
+//
+//
+//    let pdfData = createPDFWithText(text: text, configuration: pageConfig)
+//    return pdfData
+//}
+//
+//func createPDFWithText(text: String, configuration: Pdf.PageConfiguration) -> Data {
+//        let pdfData = NSMutableData()
+//        let pageRect = CGRect(origin: .zero, size: configuration.pageSize)
+//        
+//        let consumer = CGDataConsumer(data: pdfData as CFMutableData)!
+//        var mediaBox = pageRect
+//        
+//        let pdfContext = CGContext(consumer: consumer, mediaBox: &mediaBox, nil)!
+//        
+//        pdfContext.beginPDFPage(nil)
+//        
+//        let textRect = CGRect(
+//            x: configuration.pageMargins.left,
+//            y: configuration.pageSize.height - configuration.pageMargins.top - 100, // Adjusting y for top-down coordinate system
+//            width: configuration.pageSize.width - configuration.pageMargins.left - configuration.pageMargins.right,
+//            height: configuration.pageSize.height - configuration.pageMargins.top - configuration.pageMargins.bottom
+//        )
+//        
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.alignment = .left
+//        
+//        let textAttributes: [NSAttributedString.Key: Any] = [
+//            .font: NSFont.systemFont(ofSize: 16),
+//            .paragraphStyle: paragraphStyle
+//        ]
+//        
+//        let attributedString = NSAttributedString(string: text, attributes: textAttributes)
+//        attributedString.draw(in: textRect)
+//        
+//        pdfContext.endPDFPage()
+//        pdfContext.closePDF()
+//        
+//        return pdfData as Data
+//    }
 
 func fetchSetCodeList() async throws -> [ScryfallSet] {
     let url = URL(string: "https://api.scryfall.com/sets")!
@@ -357,10 +352,12 @@ class CardInfoViewModel: Identifiable {
             //Handle Special Treatments in (Parenthesis)
             if cardName.last == ")" && cardName.contains("("){
                 let splitName = cardName.split(separator: " ")
-                let splitNameStrings: [String] = splitName.map { String($0) }
+                let splitNameStringsTemp: [String] = splitName.map { String($0) }
+                let firstIndex = firstIndexStartingWith(prefix: "(", in: splitNameStringsTemp)!
+                let splitNameStrings = splitNameStringsTemp[firstIndex...]
                 specialCardFlag = true
-                let firstIndex = firstIndexStartingWith(prefix: "(", in: splitNameStrings)!
-                if firstIndexStartingWith(prefix: "(", in: splitNameStrings)! == splitNameStrings.indices.last {
+                
+                if splitNameStrings.count == 1 {
                     switch splitNameStrings.last {
                         case "(Showcase)":
                         newSpecialCard.types.append(.showcase(type: nil))
@@ -380,20 +377,22 @@ class CardInfoViewModel: Identifiable {
                     specialCards.append((cardName, nil, cardSet, newSpecialCard.types))
                     cardsToModify[idx].1 = cardName
                 }else{
-                    //exactly two words in the parenthesis
-                    if (splitNameStrings.indices.last! - firstIndex == 1){
-                        print(splitNameStrings[splitNameStrings.count - 2])
-                        switch splitNameStrings[splitNameStrings.count - 2]{
+                    //more than one word in the paren, typically just 2
+                    if (splitNameStrings.count > 1){
+                        let type = splitNameStrings[2...].joined(separator: " ")
+                        switch splitNameStrings.first{
                         case "(Showcase":
+                            
                             newSpecialCard.types.append(.showcase(type: String(splitNameStrings.last!.dropLast())))
                         case "(Foil":
+                            
                             newSpecialCard.types.append(.specialFoil(type: String(splitNameStrings.last!.dropLast())))
                         case "(Extended":
+                            
                             newSpecialCard.types.append(.extendedArt)
-
                         case "(Borderless":
+                            
                             newSpecialCard.types.append(.borderless(type: String(splitNameStrings.last!.dropLast())))
-
                         default:
                             newSpecialCard.types.append(.unknown(text: "\(splitNameStrings[splitNameStrings.count - 2]) \(splitNameStrings.last!)"))
                         }
@@ -470,12 +469,13 @@ class CardInfoViewModel: Identifiable {
                 erroredCards.append((quantity, setName, condition, "Unknown Error", cardName))
                 print(error)
             }
-            modelLogger.log("Processed++!")
+//            modelLogger.log("Processed++!")
             numberOfCardsProcessed += 1
         }
-        modelLogger.log("Post-Processing!")
-        modelLogger.log("\(specialCards.count)")
-        modelLogger.log("\(specialCardFlag)")
+        
+//        modelLogger.log("Post-Processing!")
+//        modelLogger.log("\(specialCards.count)")
+//        modelLogger.log("\(specialCardFlag)")
         if(specialCardFlag){
             modelLogger.log("Dealing with special cards!")
             var appendedCard: (Int, String, String, String, String, String)
@@ -547,7 +547,7 @@ class CardInfoViewModel: Identifiable {
         }
         let result = globalSetsData.first { $0.name.lowercased() == sanitizedSetName.lowercased() }?.code
         if (result ?? "") == ""{
-            print("Failed to look up set code for set name: \(setName) using sanitzed name: \(sanitizedSetName)")
+            print("Failed to look up set code for set name: \(setName) using sanitized name: \(sanitizedSetName)")
         }
         return result
     }
@@ -583,7 +583,7 @@ class CardInfoViewModel: Identifiable {
         for (quantity, setName, color, rarity, condition, cardName) in cardDetails {
             let cardInfo = "\(quantity)x - \(color) - \(cardName) - \(rarity) - \(condition)"
             if rarity == "Rare" || rarity == "Mythic" {
-                output["Mythics and Rares", default: []].append(cardInfo)
+                output["Mythics and Rares", default: []].append(cardInfo + " - \(setName)")
                 if rarity == "Rare"{
                     numberOfRares+=quantity
                 }
@@ -609,10 +609,10 @@ class CardInfoViewModel: Identifiable {
             result += sortedErrored.map { ("\($0.0)x - \($0.4) - \($0.1) - \($0.2) - \($0.3)") }.joined(separator: "\n")
         }
         
-        result = "\(customerName)\n\nPicklist Generation Time:\n \(getCurrentTimestamp()) Pacific\n\n\(Int(numberOfCardsTotal)) Total Cards:\n"+"-> \(numberOfMythics) Mythics\n"+"-> \(numberOfRares) Rares\n-> \(numberOfOther) Other Rarities\n-> \(erroredCards.count) Not Found\n\n"+result
+        result = "Customer: \(customerName)\n\nPicklist Generation Time:\n \(getCurrentTimestamp()) Pacific\n\n\(Int(numberOfCardsTotal)) Total Cards:\n"+"-> \(numberOfMythics) Mythics\n"+"-> \(numberOfRares) Rares\n-> \(numberOfOther) Other Rarities\n-> \(erroredCards.count) Not Found\n\n"+result
         
         DispatchQueue.main.async {
-            modelLogger.log("Basically done!")
+            //modelLogger.log("Basically done!")
             self.isLoading = false
             self.jobProcessed = true
             self.outputText = result
@@ -632,6 +632,12 @@ func copyToClipboard(text: String) {
     let pasteboard = NSPasteboard.general
     pasteboard.clearContents()
     pasteboard.setString(text, forType: .string)
+}
+
+func copyFromClipboard() -> String {
+    let pasteboard = NSPasteboard.general
+    let clipboardText = pasteboard.string(forType: .string) ?? ""
+    return clipboardText
 }
 
 // Scryfall API response models
@@ -663,12 +669,15 @@ struct CardFace: Codable {
 // Main SwiftUI view
 struct MainAppView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    
     //@Query(sort: \SavedSession.date) private var savedSessions: [SavedSession]
     @State private var showPrinterAlert = false
     @State private var processingJob = CardInfoViewModel( inputText: "")
+    
     // Define focus state for text fields
     @FocusState private var focusedField: Field?
-
+    private let printer = Printer()
+    
     // Enum to represent different fields
     enum Field: Hashable {
         case toBeProcessed
@@ -688,7 +697,7 @@ struct MainAppView: View {
                 .padding(.bottom, 0)
                 .frame(maxWidth: 500)
             HStack(alignment: .lastTextBaseline){
-                Text("Pullscription™ Magic :The Gathering Card Pick List Generator")
+                Text("Pullscription™ Magic: The Gathering Card Pick List Generator")
                     .font(.title2)
                     .bold()
                     .padding(.bottom, 0)
@@ -714,7 +723,7 @@ struct MainAppView: View {
                                 TextField("Customer Name", text: $processingJob.customerName)
                                     
                             }
-                            Text("Paste card data:")
+                            Text("Card data:")
                                 .font(.headline)
                             
                             TextEditor(text: $processingJob.inputText)
@@ -752,13 +761,27 @@ struct MainAppView: View {
                                                 .font(.title)
                                                 .foregroundColor(.green)
                                                 .padding(.leading)
-                                            Text("Process List")
+                                            Text("Process")
                                                 .padding([.top, .trailing, .bottom])
                                                 .bold()
                                         }
                                     }
                                     .disabled(processingJob.jobProcessed)
-                                    
+                                    Button(action: {
+                                        processingJob.inputText = copyFromClipboard()
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "document.on.clipboard")
+                                                .font(.title)
+                                                .foregroundColor(.mint)
+                                                .padding(.leading)
+                                            Text("Paste")
+                                                .padding([.top, .trailing, .bottom])
+                                                .bold()
+                                        }
+                                    }
+                                    .disabled(processingJob.jobProcessed)
+                                    Spacer()
                                     Button(action: {
                                         processingJob.inputText = ""
                                     }) {
@@ -771,11 +794,11 @@ struct MainAppView: View {
                                                 .padding([.top, .trailing, .bottom])
                                                 .bold()
                                         }
+                                        
                                     }
-                                    .disabled(processingJob.jobProcessed)
-                                    HStack{
-                                        processingJob.jobProcessed ? Text("Start New Job to Process New Cards ↘").font(.caption2).padding() : Text("").padding()
-                                    }
+                                    .disabled(processingJob.inputText.isEmpty)
+                                    
+
                                 }
                                 
                             }
@@ -796,31 +819,20 @@ struct MainAppView: View {
                             
                             HStack{
                                 Button(action: {
-                                    //showPrinterAlert = true
-                                    let printer = Printer.shared
-                                    try? printer.print(.string(processingJob.outputText))
+                                    //let pdf = generatePDF(text: processingJob.outputText)
+                                    let outputPrint = PrintItem.string(processingJob.outputText, configuration: pageConfig)
+                                    try? printer.print(outputPrint)
                                 }) {
                                     HStack {
                                         Image(systemName: "printer.filled.and.paper") .font(.title)
                                             .foregroundColor(.gray)
                                             .padding(.leading)
-                                        Text("Print Pick List")
+                                        Text("Print")
                                             .padding([.top, .trailing, .bottom])
                                             .bold()
-                                        
                                     }
                                 }
-                                /*.alert("Printing is Unreliable", isPresented: $showPrinterAlert) {
-                                                Button("Print Anyway") { try? printer.print(.string(processingJob.outputText)) }
-                                    /*Button("Print Alternate Way") {
-                                        writeAndPrintFile(text: processingJob.outputText)
-                                    }*/
-                                    Button("Cancel") {}
-                                        .foregroundColor(.red)
-                                            } message: {
-                                                Text("Printing currently gets cut off after about 40 cards. For larger lists, Copy the text and print from TextEdit.")
-                                            }*/
-                                
+                                .disabled(!processingJob.jobProcessed)
                                 Button(action: {
                                     copyToClipboard(text: processingJob.outputText)
                                 }) {
@@ -834,6 +846,7 @@ struct MainAppView: View {
                                             .bold()
                                     }
                                 }
+                                .disabled(!processingJob.jobProcessed)
                                 
                             }
                             
@@ -843,26 +856,18 @@ struct MainAppView: View {
                         Divider()
                         HStack(){
                             Spacer()
-                            
+                            HStack{
+                                processingJob.jobProcessed ? Text("Start New Job to Process Other Cards 􀄫").font(.title3).padding() : Text("").padding()
+                            }
                             Button(action: {
                                 processingJob.clear()
-                                /*
-                                let sessionToBeSaved = SavedSession(name: processingJob.customerName, processedCardListText: processingJob.outputText, date: processingJob.date, inputText: processingJob.inputText, numberOfCardsTotal: Int(processingJob.numberOfCardsTotal), context: viewContext)
-                                viewContext.insert(sessionToBeSaved)
-                                
-                                do {
-                                            //try viewContext.save()
-                                        } catch {
-                                            print("Error saving session: \(error)")
-                                        }
-                                */
                             }) {
                                 HStack {
                                     Image(systemName: "doc.fill.badge.plus")
                                         .font(.title)
                                         .padding(.leading)
                                     
-                                    Text("New Job")
+                                    Text("New")
                                         .padding([.top, .trailing, .bottom])
                                         .bold()
                                 }
@@ -938,7 +943,6 @@ struct MainAppView: View {
         }
     }
 }
-
 
 
 #Preview {
