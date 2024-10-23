@@ -583,7 +583,7 @@ class CardInfoViewModel: Identifiable {
         for (quantity, setName, color, rarity, condition, cardName) in cardDetails {
             let cardInfo = "\(quantity)x - \(color) - \(cardName) - \(rarity) - \(condition)"
             if rarity == "Rare" || rarity == "Mythic" {
-                output["Mythics and Rares", default: []].append(cardInfo + " - \(setName)")
+                output["Mythics and Rares", default: []].append(cardInfo + " - \(setName)\n")
                 if rarity == "Rare"{
                     numberOfRares+=quantity
                 }
@@ -593,7 +593,7 @@ class CardInfoViewModel: Identifiable {
                     
             } else {
                 numberOfOther+=quantity
-                output[setName, default: []].append(cardInfo)
+                output[setName, default: []].append(cardInfo + "\n")
             }
         }
         for (key, value) in output {
@@ -772,7 +772,7 @@ struct MainAppView: View {
                                         processingJob.inputText = copyFromClipboard()
                                     }) {
                                         HStack {
-                                            Image(systemName: "document.on.clipboard")
+                                            Image(systemName: "doc.on.clipboard")
                                                 .font(.title)
                                                 .foregroundColor(.mint)
                                                 .padding(.leading)
