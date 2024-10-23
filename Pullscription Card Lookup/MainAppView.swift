@@ -669,7 +669,8 @@ struct CardFace: Codable {
 // Main SwiftUI view
 struct MainAppView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    
+    // Use this to track window visibility
+    @State private var isWindowVisible = true
     //@Query(sort: \SavedSession.date) private var savedSessions: [SavedSession]
     @State private var showPrinterAlert = false
     @State private var processingJob = CardInfoViewModel( inputText: "")
@@ -935,10 +936,21 @@ struct MainAppView: View {
         }
         .padding(.bottom, 0)
         .frame(minWidth: 600, minHeight: 850)
+        .onDisappear(){
+            isWindowVisible = false
+        }
         .onAppear(){
+            isWindowVisible = true
             focusedField = .toBeProcessed
             Task{
                 globalSetsData = try! await fetchSetCodeList()
+            }
+        }
+        .onChange(of: NSApp.isActive) { isActive in
+            if isActive && !isWindowVisible {
+                // If the app becomes active and the window is not visible, reopen it
+                NSApp.windows.first?.makeKeyAndOrderFront(nil)
+                isWindowVisible = true
             }
         }
     }
