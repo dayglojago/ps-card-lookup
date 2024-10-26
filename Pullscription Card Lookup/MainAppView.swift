@@ -11,51 +11,8 @@ import AppKit
 import SwiftData
 import OSLog
 import Foundation
-import CoreGraphics
 
-let modelLogger = Logger.init(
-    subsystem: "com.picklist.models",
-    category: "picklist.debugging"
-)
 
-extension String {
-    func convertToPlainText() -> String {
-        let attributedString = try? NSAttributedString(
-            data: Data(self.utf8),
-            options: [.documentType: NSAttributedString.DocumentType.plain],
-            documentAttributes: nil
-        )
-        return attributedString?.string ?? self
-    }
-}
-
-// Model to hold card information
-struct Card: Identifiable {
-    let id = UUID()
-    let quantity: Int
-    let name: String
-    let setName: String
-    let condition: String
-}
-
-enum SpecialCardType: Equatable{
-    case DFC
-    case extendedArt
-    case specialFoil(type: String?)
-    case foil
-    case showcase(type: String?)
-    case borderless(type: String?)
-    case retro
-    case unknown(text: String?)
-}
-
-enum NetworkError: Error {
-    case invalidURL
-    case invalidServerResponse
-    case noData
-    case decodingError
-    case custom(errorMessage: String)
-}
 
 //@Model
 //class SavedSession: NSManagedObject {
@@ -89,58 +46,6 @@ enum NetworkError: Error {
 //    
 //}
 
-let superheroNames = [
-    "Superman",
-    "Batman",
-    "Wonder Woman",
-    "Spider-Man",
-    "Iron Man",
-    "Captain America",
-    "Thor",
-    "Hulk",
-    "Black Widow",
-    "Aquaman",
-    "Flash",
-    "Green Lantern",
-    "Doctor Strange",
-    "Black Panther",
-    "Scarlet Witch",
-    "Vision",
-    "Ant-Man",
-    "Wasp",
-    "Hawkeye",
-    "Falcon",
-    "Winter Soldier",
-    "Cyborg",
-    "Martian Manhunter",
-    "Green Arrow",
-    "Shazam",
-    "Captain Marvel",
-    "Star-Lord",
-    "Gamora",
-    "Groot",
-    "Rocket Raccoon",
-    "Drax the Destroyer",
-    "Silver Surfer",
-    "Daredevil",
-    "Jessica Jones",
-    "Luke Cage",
-    "Iron Fist",
-    "Quicksilver",
-    "Wolverine",
-    "Storm",
-    "Jean Grey",
-    "Cyclops",
-    "Rogue",
-    "Nightcrawler",
-    "Beast",
-    "Professor X",
-    "Magneto",
-    "Deadpool",
-    "Punisher",
-    "Blade",
-    "Moon Knight"
-]
 
 var globalSetsData: [ScryfallSet] = []
 
@@ -192,34 +97,6 @@ let pageConfig = Pdf.PageConfiguration(
 //        
 //        return pdfData as Data
 //    }
-
-func fetchSetCodeList() async throws -> [ScryfallSet] {
-    let url = URL(string: "https://api.scryfall.com/sets")!
-    let (data, response) = try await URLSession.shared.data(from: url)
-
-    guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-        print("Connect user to store: Non-200 Response: \(response as URLResponse)")
-        throw NetworkError.invalidServerResponse
-    }
-    guard let setsData = try? JSONDecoder().decode(ScryfallSetsResponse.self, from: data) else {
-        throw NetworkError.decodingError
-    }
-    
-    return setsData.data
-}
-func isInteger(_ string: String) -> Bool {
-    return Int(string.trimmingCharacters(in: .whitespacesAndNewlines)) != nil
-}
-
-func firstIndexStartingWith(prefix: String, in array: [String]) -> Int? {
-    return array.firstIndex { $0.hasPrefix(prefix) }
-}
-
-extension Bundle {
-    var versionNumber: String {
-        return infoDictionary?["CFBundleShortVersionString"] as! String
-    }
-}
 
 @Observable
 class CardInfoViewModel: Identifiable {
@@ -288,7 +165,7 @@ class CardInfoViewModel: Identifiable {
                 i += 1
                 continue
             }else{
-                print("Found first card")
+                modelLogger.log("Found first card")
                 foundFirstCard = true
             }
             if line.starts(with: "** "){
@@ -338,7 +215,7 @@ class CardInfoViewModel: Identifiable {
     private func fetchCardDetails(for cards: [(Int, String, String, String)]) async {
         var cardDetails: [(Int, String, String, String, String, String)] = []
         var erroredCards: [(Int, String, String, String, String)] = []
-        
+        var cardNames: [String] = []
         var specialCards: [ (String, String?, String, [SpecialCardType]) ] = []
         var specialCardFlag = false
         
@@ -379,40 +256,56 @@ class CardInfoViewModel: Identifiable {
                 }else{
                     //more than one word in the paren, typically just 2
                     if (splitNameStrings.count > 1){
-                        let type = splitNameStrings[2...].joined(separator: " ")
+                        let string = splitNameStrings.joined(separator: " ")
+                        modelLogger.log("Processing String: \(string)")
+                        //find the type of special card by extracting the second and subsequent words
+                        let type: String
+
+                        if splitNameStrings.indices.contains(1) {
+                            // Safely access elements starting from index 1 if it exists
+                            type = splitNameStrings[1...].joined(separator: " ")
+                        } else {
+                            // Default to empty string if not enough elements
+                            type = ""
+                        }
                         switch splitNameStrings.first{
                         case "(Showcase":
                             
-                            newSpecialCard.types.append(.showcase(type: String(splitNameStrings.last!.dropLast())))
+                            newSpecialCard.types.append(.showcase(type: String(splitNameStrings.dropFirst().joined(separator: " ").dropLast())))
                         case "(Foil":
                             
-                            newSpecialCard.types.append(.specialFoil(type: String(splitNameStrings.last!.dropLast())))
+                            newSpecialCard.types.append(.specialFoil(type: String(splitNameStrings.dropFirst().joined(separator: " ").dropLast())))
                         case "(Extended":
                             
                             newSpecialCard.types.append(.extendedArt)
                         case "(Borderless":
                             
-                            newSpecialCard.types.append(.borderless(type: String(splitNameStrings.last!.dropLast())))
+                            newSpecialCard.types.append(.borderless(type: String(splitNameStrings.dropFirst().joined(separator: " ").dropLast())))
                         default:
                             newSpecialCard.types.append(.unknown(text: "\(splitNameStrings[splitNameStrings.count - 2]) \(splitNameStrings.last!)"))
+                        }
+                        //Check for DFCs
+                        if cardName.contains(" // "){
+                            specialCardFlag = true
+                            cardNames = cardName.components(separatedBy: " // ")
+                            newSpecialCard.types.append(.DFC)
+                            cardsToModify[idx].1 = cardNames[0]
                         }
                         modelLogger.log("Split Name: \(splitName), firstIndex: \(firstIndex), Last Index: \(splitName.indices.last!)")
                         cardName = splitName.dropLast().dropLast().joined(separator: " ")
                         modelLogger.log("New Name: \(cardName)")
-                        specialCards.append((cardName, nil, cardSet, newSpecialCard.types))
+                        if newSpecialCard.types.contains(.DFC){
+                            specialCards.append((cardNames[0], cardNames[1], cardSet, newSpecialCard.types))
+                        }
+                        else{
+                            specialCards.append((cardName, nil, cardSet, newSpecialCard.types))
+                        }
                         cardsToModify[idx].1 = cardName
                     }
                 }
 
             }
-            // DFCs
-            if cardName.contains(" // "){
-                //check for DFCs that may have special treatments applied first
-                specialCardFlag = true
-                let cardNames = cardName.components(separatedBy: " // ")
-                specialCards.append((cardNames[0], cardNames[1], cardSet, [SpecialCardType.DFC]))
-                cardsToModify[idx].1 = cardNames[0]
-            }
+
             
         }
         
@@ -467,7 +360,7 @@ class CardInfoViewModel: Identifiable {
                 }
             } catch {
                 erroredCards.append((quantity, setName, condition, "Unknown Error", cardName))
-                print(error)
+                modelLogger.log("\(error)")
             }
 //            modelLogger.log("Processed++!")
             numberOfCardsProcessed += 1
@@ -488,10 +381,12 @@ class CardInfoViewModel: Identifiable {
                     if cardName == name && setName == set {
                         modelLogger.log("Matched a special card: \(cardName), types: \(types)")
                         var workingCardName = cardName
+                        modelLogger.log("Before type in types: \(cardName) has types \(types)")
                         for type in types{
+                            modelLogger.log("\(cardName) has type \(type.description)")
                             switch (type){
                             case .DFC:
-                                workingCardName = workingCardName+" (DFC with \(DFCName ?? "DFC Not Found"))"
+                                workingCardName = workingCardName+" (DFC with \(DFCName ?? "DFC Name Not Found"))"
                             case .borderless(let type):
                                 workingCardName = workingCardName+" (Borderless"+((type != nil) ? " \(type!)" : "")+")"
                             case .extendedArt:
@@ -525,7 +420,7 @@ class CardInfoViewModel: Identifiable {
         let (data, response) = try await URLSession.shared.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            print("Connect user to store: Non-200 Response: \(response as URLResponse)")
+            modelLogger.log("Connect user to store: Non-200 Response: \(response as URLResponse)")
             throw NetworkError.invalidServerResponse
         }
         
@@ -547,7 +442,7 @@ class CardInfoViewModel: Identifiable {
         }
         let result = globalSetsData.first { $0.name.lowercased() == sanitizedSetName.lowercased() }?.code
         if (result ?? "") == ""{
-            print("Failed to look up set code for set name: \(setName) using sanitized name: \(sanitizedSetName)")
+            modelLogger.log("Failed to look up set code for set name: \(setName) using sanitized name: \(sanitizedSetName)")
         }
         return result
     }
@@ -605,6 +500,7 @@ class CardInfoViewModel: Identifiable {
         
         if !erroredCards.isEmpty {
             let sortedErrored = erroredCards.sorted { $0.2 < $1.2 }
+            modelLogger.log("\(sortedErrored)")
             result += "\n\nCards that could not be found:\n"
             result += sortedErrored.map { ("\($0.0)x - \($0.4) - \($0.1) - \($0.2) - \($0.3)") }.joined(separator: "\n")
         }
@@ -620,51 +516,6 @@ class CardInfoViewModel: Identifiable {
     }
 }
 
-// helper functions
-func getCurrentTimestamp() -> String {
-    let date = Date()
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
-    return formatter.string(from: date)
-}
-
-func copyToClipboard(text: String) {
-    let pasteboard = NSPasteboard.general
-    pasteboard.clearContents()
-    pasteboard.setString(text, forType: .string)
-}
-
-func copyFromClipboard() -> String {
-    let pasteboard = NSPasteboard.general
-    let clipboardText = pasteboard.string(forType: .string) ?? ""
-    return clipboardText
-}
-
-// Scryfall API response models
-struct ScryfallSetsResponse: Codable {
-    let data: [ScryfallSet]
-}
-
-struct ScryfallSet: Codable {
-    let name: String
-    let code: String
-}
-
-struct ScryfallCardResponse: Codable {
-    let data: [CardData]
-}
-
-struct CardData: Codable {
-    let colors: [String]?
-    let rarity: String
-    let type_line: String
-    let card_faces: [CardFace]?
-}
-
-struct CardFace: Codable {
-    let type_line: String
-    let colors: [String]
-}
 
 // Main SwiftUI view
 struct MainAppView: View {
