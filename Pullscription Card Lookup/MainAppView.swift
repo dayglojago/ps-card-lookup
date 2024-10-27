@@ -227,13 +227,20 @@ class CardInfoViewModel: Identifiable {
             var DFCName: String?
             var newSpecialCard: (String, String?, String, types: [SpecialCardType]) = (cardName, DFCName, cardSet, [])
             //Handle Special Treatments in (Parenthesis)
+            //Check for DFCs
+            if cardName.contains(" // "){
+                specialCardFlag = true
+                cardNames = cardName.components(separatedBy: " // ")
+                newSpecialCard.types.append(.DFC)
+            }
             if cardName.last == ")" && cardName.contains("("){
+                modelLogger.log("Processing Card: \(cardName) and found parens")
                 let splitName = cardName.split(separator: " ")
                 let splitNameStringsTemp: [String] = splitName.map { String($0) }
                 let firstIndex = firstIndexStartingWith(prefix: "(", in: splitNameStringsTemp)!
                 let splitNameStrings = splitNameStringsTemp[firstIndex...]
                 specialCardFlag = true
-                
+
                 if splitNameStrings.count == 1 {
                     switch splitNameStrings.last {
                         case "(Showcase)":
@@ -284,31 +291,41 @@ class CardInfoViewModel: Identifiable {
                         default:
                             newSpecialCard.types.append(.unknown(text: "\(splitNameStrings[splitNameStrings.count - 2]) \(splitNameStrings.last!)"))
                         }
-                        //Check for DFCs
-                        if cardName.contains(" // "){
-                            specialCardFlag = true
-                            cardNames = cardName.components(separatedBy: " // ")
-                            newSpecialCard.types.append(.DFC)
-                            cardsToModify[idx].1 = cardNames[0]
-                        }
+
                         modelLogger.log("Split Name: \(splitName), firstIndex: \(firstIndex), Last Index: \(splitName.indices.last!)")
                         cardName = splitName.dropLast().dropLast().joined(separator: " ")
                         modelLogger.log("New Name: \(cardName)")
-                        if newSpecialCard.types.contains(.DFC){
-                            specialCards.append((cardNames[0], cardNames[1], cardSet, newSpecialCard.types))
-                        }
-                        else{
-                            specialCards.append((cardName, nil, cardSet, newSpecialCard.types))
-                        }
-                        cardsToModify[idx].1 = cardName
+                        modelLogger.log("Types: \(newSpecialCard.types)")
+
+                        
                     }
                 }
 
             }
-
+            
+            if newSpecialCard.types.contains(.DFC){
+                modelLogger.log("card \(cardName) is DFC")
+                let splitBackFace = cardNames[1].split(separator: " ")
+                modelLogger.log("DFC Split backFaceName: \(splitBackFace)")
+                let splitBackFaceTemp: [String] = splitBackFace.map { String($0) }
+                let firstIndexToRemove = firstIndexStartingWith(prefix: "(", in: splitBackFaceTemp) ?? 0
+                modelLogger.log("firstIndexToRemove: \(firstIndexToRemove)")
+                let numberToRemove = firstIndexToRemove != 0 ? splitBackFace.count - firstIndexToRemove : 0
+                let backFaceName = splitBackFace.dropLast(numberToRemove).joined(separator: " ")
+                modelLogger.log("DFC backFaceName: \(backFaceName)")
+                specialCards.append((cardNames[0], backFaceName, cardSet, newSpecialCard.types))
+            }
+            else{
+                specialCards.append((cardName, nil, cardSet, newSpecialCard.types))
+            }
+            if newSpecialCard.types.contains(.DFC){
+                cardsToModify[idx].1 = cardNames[0]
+            }else{
+                cardsToModify[idx].1 = cardName
+            }
+            
             
         }
-        
         for (quantity, cardName, setName, condition) in cardsToModify {
             do {
                 if let setCode = fetchSetCode(for: setName) {
@@ -341,7 +358,7 @@ class CardInfoViewModel: Identifiable {
                                 }
                             }
                         } else {
-                            // If neither main colors nor card faces have colors
+                            // If neither main card nor card faces have colors
                             if cardData.type_line.contains("Land"){
                                 color = "Land"
                             } else if cardData.type_line.contains("Artifact"){
@@ -377,12 +394,13 @@ class CardInfoViewModel: Identifiable {
                 for index in cardDetails.indices {
                     
                     let (quantity, setName, color, rarity, condition, cardName) = cardDetails[index]
-                    modelLogger.log("Comparing \(cardName) and \(name)")
-                    if cardName == name && setName == set {
+                    modelLogger.log("Comparing \(DFCName ?? "") and \(name)")
+                    if (cardName == name || cardName == (name + " // " + (DFCName ?? ""))) && setName == set {
                         modelLogger.log("Matched a special card: \(cardName), types: \(types)")
                         var workingCardName = cardName
                         modelLogger.log("Before type in types: \(cardName) has types \(types)")
-                        for type in types{
+                        let sortedTypes = types.sorted(by: sortSpecialCards)
+                        for type in sortedTypes{
                             modelLogger.log("\(cardName) has type \(type.description)")
                             switch (type){
                             case .DFC:
@@ -525,7 +543,9 @@ struct MainAppView: View {
     //@Query(sort: \SavedSession.date) private var savedSessions: [SavedSession]
     @State private var showPrinterAlert = false
     @State private var processingJob = CardInfoViewModel( inputText: "")
-    
+    let boldCenterAttributes: [NSAttributedString.Key: Any] = [
+        .font: NSFont.boldSystemFont(ofSize: NSFont.systemFontSize)
+    ]
     // Define focus state for text fields
     @FocusState private var focusedField: Field?
     private let printer = Printer()
@@ -672,12 +692,15 @@ struct MainAppView: View {
                             HStack{
                                 Button(action: {
                                     //let pdf = generatePDF(text: processingJob.outputText)
-                                    let outputPrint = PrintItem.string(processingJob.outputText, configuration: pageConfig)
+                                    let boldAttributedString = NSAttributedString(string: processingJob.outputText, attributes: boldCenterAttributes)
+
+                                    
+                                    let outputPrint = PrintItem.attributedString(boldAttributedString, configuration: pageConfig)
                                     try? printer.print(outputPrint)
                                 }) {
                                     HStack {
                                         Image(systemName: "printer.filled.and.paper") .font(.title)
-                                            .foregroundColor(.gray)
+                                            .foregroundColor(.black)
                                             .padding(.leading)
                                         Text("Print")
                                             .padding([.top, .trailing, .bottom])
@@ -709,13 +732,14 @@ struct MainAppView: View {
                         HStack(){
                             Spacer()
                             HStack{
-                                processingJob.jobProcessed ? Text("Start New Job to Process Other Cards 􀄫").font(.title3).padding() : Text("").padding()
+                                processingJob.jobProcessed ? Text("Press New to Process Other Cards").font(.title3).padding() : Text("").padding()
                             }
                             Button(action: {
                                 processingJob.clear()
                             }) {
                                 HStack {
                                     Image(systemName: "doc.fill.badge.plus")
+                                        .foregroundColor(.red)
                                         .font(.title)
                                         .padding(.leading)
                                     

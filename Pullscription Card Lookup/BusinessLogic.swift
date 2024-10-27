@@ -195,6 +195,54 @@ enum SpecialCardType: Equatable, CustomStringConvertible{
     }
 }
 
+// Define the custom order
+let customSpecialCardOrder: [SpecialCardType] = [
+    .DFC,
+    .extendedArt,
+    .foil,
+    .specialFoil(type: nil),
+    .showcase(type: nil),
+    .borderless(type: nil),
+    .retro,
+    .unknown(text: nil)
+]
+
+func sortSpecialCards(lhs: SpecialCardType, rhs: SpecialCardType) -> Bool {
+    let lhsIndex = customSpecialCardOrder.firstIndex { lhsCase in
+        switch (lhs, lhsCase) {
+        case (.DFC, .DFC),
+             (.extendedArt, .extendedArt),
+             (.foil, .foil),
+             (.specialFoil, .specialFoil),
+             (.showcase, .showcase),
+             (.borderless, .borderless),
+             (.retro, .retro),
+             (.unknown, .unknown):
+            return true
+        default:
+            return false
+        }
+    } ?? Int.max
+    
+    let rhsIndex = customSpecialCardOrder.firstIndex { rhsCase in
+        switch (rhs, rhsCase) {
+        case (.DFC, .DFC),
+             (.extendedArt, .extendedArt),
+             (.foil, .foil),
+             (.specialFoil, .specialFoil),
+             (.showcase, .showcase),
+             (.borderless, .borderless),
+             (.retro, .retro),
+             (.unknown, .unknown):
+            return true
+        default:
+            return false
+        }
+    } ?? Int.max
+    
+    return lhsIndex < rhsIndex
+}
+
 enum NetworkError: Error {
     case invalidURL
     case invalidServerResponse
