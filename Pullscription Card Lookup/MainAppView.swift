@@ -153,47 +153,48 @@ class CardInfoViewModel: Identifiable {
             return
         }
         let lines = text.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }
-        var cards: [(Int, String, String, String)] = []
+        var cards: [(Int, String, String, String, Double)] = []
         
         isLoading = true
-
+        
         var i = 0
-        while i < lines.count {
-            let line = lines[i]
-            
-            if !isInteger(line) && !foundFirstCard{
-                i += 1
-                continue
-            }else{
-                modelLogger.log("Found first card")
-                foundFirstCard = true
-            }
-            if line.starts(with: "** "){
-                break
-            }
-            if let quantity = Int(line) {
-                if i + 1 < lines.count {
-                    let cardInfo = lines[i + 1]
-                    cards.append(parseCardInfo(quantity: quantity, cardInfo: cardInfo))
-                    i += 2
-                } else {
+            while i < lines.count {
+                let line = lines[i]
+                
+                if !isInteger(line) && !foundFirstCard{
                     i += 1
+                    continue
+                }else{
+                    modelLogger.log("Found first card")
+                    foundFirstCard = true
                 }
-            } else {
-                let parts = line.split(separator: " ", maxSplits: 1).map { String($0) }
-                if parts.count == 2, let quantity = Int(parts[0]) {
-                    let cardInfo = parts[1]
-                    cards.append(parseCardInfo(quantity: quantity, cardInfo: cardInfo))
-                    i += 1
-                } else {
-                    i += 1
+                if line.starts(with: "** "){
+                    break
                 }
+                if let quantity = Int(line) {
+                    if i + 1 < lines.count {
+                        let cardInfo = lines[i + 1] + " (" + lines[i + 2] + ")"
+                        cards.append(parseCardInfo(quantity: quantity, cardInfo: cardInfo))
+                        i += 2
+                    } else {
+                        i += 1
+                    }
+                } else {
+                    let parts = line.split(separator: " ", maxSplits: 1).map { String($0) }
+                    if parts.count == 2, let quantity = Int(parts[0]) {
+                        let cardInfo = parts[1]
+                        cards.append(parseCardInfo(quantity: quantity, cardInfo: cardInfo))
+                        i += 1
+                    } else {
+                        i += 1
+                    }
+                }
+                
             }
-            
-        }
-        let total = cards.reduce(0) { sum, card in
-            sum + card.0
-        }
+            let total = cards.reduce(0) { sum, card in
+                sum + card.0
+            }
+
         numberOfCardsTotal = Double(total)
         let cardsToSend = cards
         Task {
@@ -202,17 +203,18 @@ class CardInfoViewModel: Identifiable {
         }
     }
     
-    private func parseCardInfo(quantity: Int, cardInfo: String) -> (Int, String, String, String) {
+    private func parseCardInfo(quantity: Int, cardInfo: String) -> (Int, String, String, String, Double) {
         let parts = cardInfo.split(separator: "[", maxSplits: 1).map { $0.trimmingCharacters(in: .whitespaces) }
         let namePart = parts[0]
         let rest = parts[1].split(separator: "] - [").map { $0.trimmingCharacters(in: .whitespaces) }
         let setName = rest[0]
         let condition = rest[1].replacingOccurrences(of: "]", with: "")
-        return (quantity, namePart, setName, condition)
+        let price = 0.00
+        return (quantity, namePart, setName, condition, price)
     }
 
     
-    private func fetchCardDetails(for cards: [(Int, String, String, String)]) async {
+    private func fetchCardDetails(for cards: [(Int, String, String, String, Double)]) async {
         var cardDetails: [(Int, String, String, String, String, String)] = []
         var erroredCards: [(Int, String, String, String, String)] = []
         var cardNames: [String] = []
@@ -326,7 +328,7 @@ class CardInfoViewModel: Identifiable {
             
             
         }
-        for (quantity, cardName, setName, condition) in cardsToModify {
+        for (quantity, cardName, setName, condition, price) in cardsToModify {
             do {
                 if let setCode = fetchSetCode(for: setName) {
                     if let cardData = try await fetchIndividualCardDetails(for: cardName, setCode: setCode) {
