@@ -46,7 +46,6 @@ import Foundation
 //    
 //}
 
-
 var globalSetsData: [ScryfallSet] = []
 
 let pageConfig = Pdf.PageConfiguration(
@@ -114,7 +113,7 @@ class CardInfoViewModel: Identifiable {
     var numberOfMythics = 0
     var numberOfOther = 0
     var foundFirstCard = false
-    
+    var shopifyOnlineOrder = false
     public func clear(){
         self.id = UUID()
         self.date = getCurrentTimestamp()
@@ -130,9 +129,10 @@ class CardInfoViewModel: Identifiable {
         self.numberOfOther = 0
         self.jobProcessed = false
         self.foundFirstCard = false
+        self.shopifyOnlineOrder = false
     }
     
-    init(isLoading: Bool = false, inputText: String, outputText: String = "",  numberOfCardsTotal: Double = 0.0, numberOfCardsProcessed: Double = 0.0, numberOfRares: Int = 0, numberOfMythics: Int = 0, numberOfOther: Int = 0) {
+    init(isLoading: Bool = false, inputText: String, outputText: String = "",  numberOfCardsTotal: Double = 0.0, numberOfCardsProcessed: Double = 0.0, numberOfRares: Int = 0, numberOfMythics: Int = 0, numberOfOther: Int = 0, shopifyOnlineOrder: Bool = false) {
         self.isLoading = isLoading
         self.inputText = inputText
         self.outputText = outputText
@@ -141,6 +141,7 @@ class CardInfoViewModel: Identifiable {
         self.numberOfRares = numberOfRares
         self.numberOfMythics = numberOfMythics
         self.numberOfOther = numberOfOther
+        self.shopifyOnlineOrder = shopifyOnlineOrder
     }
     
     func processCardInfo() {
@@ -160,7 +161,18 @@ class CardInfoViewModel: Identifiable {
         var i = 0
             while i < lines.count {
                 let line = lines[i]
-                
+                if(lines[2].contains("SKU:")){
+                    shopifyOnlineOrder = true
+                }
+                if(shopifyOnlineOrder){
+                    let splitStringPriceAndQuantity = lines[i+3].split(separator: " ")
+                    let quantity = Int(splitStringPriceAndQuantity[2])!
+                    let price = splitStringPriceAndQuantity[0]
+                    let cardInfo = lines[i] + " - [" + lines[i + 1] + "] (" + String(price) + ")"
+                    cards.append(parseCardInfo(quantity: quantity, cardInfo: cardInfo))
+                    i+=5
+                    continue;
+                }
                 if !isInteger(line) && !foundFirstCard{
                     i += 1
                     continue
@@ -191,9 +203,9 @@ class CardInfoViewModel: Identifiable {
                 }
                 
             }
-            let total = cards.reduce(0) { sum, card in
-                sum + card.0
-            }
+        let total = cards.reduce(0) { sum, card in
+            sum + card.0
+        }
 
         numberOfCardsTotal = Double(total)
         let cardsToSend = cards
@@ -290,8 +302,10 @@ class CardInfoViewModel: Identifiable {
                         case "(Borderless":
                             
                             newSpecialCard.types.append(.borderless(type: String(splitNameStrings.dropFirst().joined(separator: " ").dropLast())))
+                        case "(Retro":
+                            newSpecialCard.types.append(.retro)
                         default:
-                            newSpecialCard.types.append(.unknown(text: "\(splitNameStrings[splitNameStrings.count - 2]) \(splitNameStrings.last!)"))
+                            newSpecialCard.types.append(.unknown(text: "\(splitNameStrings.joined(separator: " ").dropFirst().dropLast())"))
                         }
 
                         modelLogger.log("Split Name: \(splitName), firstIndex: \(firstIndex), Last Index: \(splitName.indices.last!)")
