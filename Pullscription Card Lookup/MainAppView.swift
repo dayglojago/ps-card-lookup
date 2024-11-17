@@ -153,7 +153,9 @@ class CardInfoViewModel: Identifiable {
             self.outputText = "Empty text submitted, please retry with actual input."
             return
         }
-        let lines = text.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }
+        var lines = text.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) }
+        //filter out entries which are just line breaks or whitespace
+        lines.removeAll(where: { $0.isEmpty })
         var cards: [(Int, String, String, String, Double)] = []
         
         isLoading = true
@@ -161,16 +163,20 @@ class CardInfoViewModel: Identifiable {
         var i = 0
             while i < lines.count {
                 let line = lines[i]
-                if(lines[2].contains("SKU:")){
+                if(lines[2].contains("SKU:") || lines[2].contains(" x ")){
                     shopifyOnlineOrder = true
                 }
                 if(shopifyOnlineOrder){
-                    let splitStringPriceAndQuantity = lines[i+3].split(separator: " ")
+                    modelLogger.log("Found Shopify Online Order; line: \(lines[i])")
+                    var lineOffset = 0
+                    //check to see if the SKU line is included
+                    lineOffset = lines[i+2].contains("SKU:") ? 3 : 2;
+                    let splitStringPriceAndQuantity = lines[i+lineOffset].split(separator: " ")
                     let quantity = Int(splitStringPriceAndQuantity[2])!
                     let price = splitStringPriceAndQuantity[0]
                     let cardInfo = lines[i] + " - [" + lines[i + 1] + "] (" + String(price) + ")"
                     cards.append(parseCardInfo(quantity: quantity, cardInfo: cardInfo))
-                    i+=5
+                    i+=lineOffset+2
                     continue;
                 }
                 if !isInteger(line) && !foundFirstCard{
