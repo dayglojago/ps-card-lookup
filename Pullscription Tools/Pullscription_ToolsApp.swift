@@ -4,9 +4,21 @@
 //
 //  Created by Jago Lourenco-Goddard on 6/13/24.
 //
-
+import AppKit
 import SwiftUI
 import Sparkle
+
+
+/// Function to resize the macOS window
+func resizeWindow(width: CGFloat, height: CGFloat) {
+    DispatchQueue.main.async {
+        if let window = NSApplication.shared.windows.first {
+            let newSize = NSSize(width: width, height: height)
+            window.setContentSize(newSize)
+            //window.center() // Optionally re-center window
+        }
+    }
+}
 
 @main
 struct Pullscription_Card_LookupApp: App {

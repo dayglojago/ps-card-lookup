@@ -11,7 +11,7 @@ import SwiftUI
 struct Tools_iPadApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainAppView()
         }
     }
 }

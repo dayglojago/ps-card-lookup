@@ -6,7 +6,13 @@
 //
 
 import PrintingKit
+
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
+
 import SwiftData
 import OSLog
 import Foundation
@@ -19,6 +25,7 @@ func getCurrentTimestamp() -> String {
     return formatter.string(from: date)
 }
 
+#if os(macOS)
 func copyToClipboard(text: String) {
     let pasteboard = NSPasteboard.general
     pasteboard.clearContents()
@@ -30,6 +37,7 @@ func copyFromClipboard() -> String {
     let clipboardText = pasteboard.string(forType: .string) ?? ""
     return clipboardText
 }
+#endif
 
 // Scryfall API response models
 struct ScryfallSetsResponse: Codable {

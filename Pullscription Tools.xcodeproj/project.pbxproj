@@ -8,52 +8,47 @@
 
 /* Begin PBXBuildFile section */
 		4914E29A2C1AE4E100B370F4 /* Pullscription_ToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914E2992C1AE4E100B370F4 /* Pullscription_ToolsApp.swift */; };
-		4914E29C2C1AE4E100B370F4 /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914E29B2C1AE4E100B370F4 /* MainAppView.swift */; };
 		4914E29E2C1AE4E300B370F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		4914E2A12C1AE4E300B370F4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */; };
-		494410CA2D685365002BF41E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49C643832C1FB770005153DB /* Info.plist */; };
+		4944110C2D6923E2002BF41E /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4944110B2D6923E2002BF41E /* PrintingKit */; };
+		494411112D6925CA002BF41E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 494E59A02C1E14F10014C288 /* PrintingKit */; };
-		4994E99B2CCC912D00D3CBB7 /* BusinessLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4994E99A2CCC912B00D3CBB7 /* BusinessLogic.swift */; };
 		49C643822C1FB4E5005153DB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 49C643812C1FB4E5005153DB /* Sparkle */; };
 		49C643852C1FBC00005153DB /* CheckForUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C643842C1FBC00005153DB /* CheckForUpdates.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		494410E02D6855D2002BF41E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4914E28E2C1AE4E100B370F4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 494410CE2D6855D1002BF41E;
-			remoteInfo = "Tools-iPad";
-		};
-		494410EA2D6855D2002BF41E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4914E28E2C1AE4E100B370F4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 494410CE2D6855D1002BF41E;
-			remoteInfo = "Tools-iPad";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		4914E2962C1AE4E100B370F4 /* Pullscription Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pullscription Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4914E2992C1AE4E100B370F4 /* Pullscription_ToolsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pullscription_ToolsApp.swift; sourceTree = "<group>"; };
-		4914E29B2C1AE4E100B370F4 /* MainAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppView.swift; sourceTree = "<group>"; };
 		4914E29D2C1AE4E300B370F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4914E2A22C1AE4E300B370F4 /* Pullscription_Tools.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pullscription_Tools.entitlements; sourceTree = "<group>"; };
 		494410CF2D6855D1002BF41E /* Tools On The Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tools On The Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		494410DF2D6855D2002BF41E /* Tools-iPadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tools-iPadTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		494410E92D6855D2002BF41E /* Tools-iPadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tools-iPadUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4994E99A2CCC912B00D3CBB7 /* BusinessLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessLogic.swift; sourceTree = "<group>"; };
-		49C643832C1FB770005153DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		494411092D692389002BF41E /* PrintingKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PrintingKit; path = "/Users/dayglojago/Library/Developer/Xcode/DerivedData/Pullscription_Tools-ceqqpejytcuuwtbbjwdrvlatpcrr/SourcePackages/checkouts/PrintingKit"; sourceTree = "<absolute>"; };
+		49C643832C1FB770005153DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Pullscription Tools/Info.plist"; sourceTree = SOURCE_ROOT; };
 		49C643842C1FBC00005153DB /* CheckForUpdates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdates.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		494411002D691150002BF41E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 494410CE2D6855D1002BF41E /* Tools On The Go */;
+		};
+		4944110F2D692456002BF41E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Shared/MainAppView.swift,
+			);
+			target = 4914E2952C1AE4E100B370F4 /* Pullscription Tools */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		494410D02D6855D1002BF41E /* Tools-iPad */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Tools-iPad"; sourceTree = "<group>"; };
-		494410E22D6855D2002BF41E /* Tools-iPadTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Tools-iPadTests"; sourceTree = "<group>"; };
-		494410EC2D6855D2002BF41E /* Tools-iPadUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Tools-iPadUITests"; sourceTree = "<group>"; };
+		494410D02D6855D1002BF41E /* Tools-iPad */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4944110F2D692456002BF41E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 494411002D691150002BF41E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Tools-iPad"; sourceTree = "<group>"; };
+		494411022D691571002BF41E /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,20 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		494410DC2D6855D2002BF41E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		494410E62D6855D2002BF41E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				4944110C2D6923E2002BF41E /* PrintingKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,8 +77,7 @@
 			children = (
 				4914E2982C1AE4E100B370F4 /* Pullscription Tools */,
 				494410D02D6855D1002BF41E /* Tools-iPad */,
-				494410E22D6855D2002BF41E /* Tools-iPadTests */,
-				494410EC2D6855D2002BF41E /* Tools-iPadUITests */,
+				494411082D692389002BF41E /* Frameworks */,
 				4914E2972C1AE4E100B370F4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -106,8 +87,6 @@
 			children = (
 				4914E2962C1AE4E100B370F4 /* Pullscription Tools.app */,
 				494410CF2D6855D1002BF41E /* Tools On The Go.app */,
-				494410DF2D6855D2002BF41E /* Tools-iPadTests.xctest */,
-				494410E92D6855D2002BF41E /* Tools-iPadUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,10 +94,9 @@
 		4914E2982C1AE4E100B370F4 /* Pullscription Tools */ = {
 			isa = PBXGroup;
 			children = (
+				494411022D691571002BF41E /* Shared */,
 				49C643832C1FB770005153DB /* Info.plist */,
 				4914E2992C1AE4E100B370F4 /* Pullscription_ToolsApp.swift */,
-				4914E29B2C1AE4E100B370F4 /* MainAppView.swift */,
-				4994E99A2CCC912B00D3CBB7 /* BusinessLogic.swift */,
 				49C643842C1FBC00005153DB /* CheckForUpdates.swift */,
 				4914E29D2C1AE4E300B370F4 /* Assets.xcassets */,
 				4914E2A22C1AE4E300B370F4 /* Pullscription_Tools.entitlements */,
@@ -135,6 +113,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		494411082D692389002BF41E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				494411092D692389002BF41E /* PrintingKit */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -149,6 +135,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				494411022D691571002BF41E /* Shared */,
 			);
 			name = "Pullscription Tools";
 			packageProductDependencies = (
@@ -173,59 +162,15 @@
 			);
 			fileSystemSynchronizedGroups = (
 				494410D02D6855D1002BF41E /* Tools-iPad */,
+				494411022D691571002BF41E /* Shared */,
 			);
 			name = "Tools On The Go";
 			packageProductDependencies = (
+				4944110B2D6923E2002BF41E /* PrintingKit */,
 			);
 			productName = "Tools-iPad";
 			productReference = 494410CF2D6855D1002BF41E /* Tools On The Go.app */;
 			productType = "com.apple.product-type.application";
-		};
-		494410DE2D6855D2002BF41E /* Tools-iPadTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 494410F82D6855D2002BF41E /* Build configuration list for PBXNativeTarget "Tools-iPadTests" */;
-			buildPhases = (
-				494410DB2D6855D2002BF41E /* Sources */,
-				494410DC2D6855D2002BF41E /* Frameworks */,
-				494410DD2D6855D2002BF41E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				494410E12D6855D2002BF41E /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				494410E22D6855D2002BF41E /* Tools-iPadTests */,
-			);
-			name = "Tools-iPadTests";
-			packageProductDependencies = (
-			);
-			productName = "Tools-iPadTests";
-			productReference = 494410DF2D6855D2002BF41E /* Tools-iPadTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		494410E82D6855D2002BF41E /* Tools-iPadUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 494410F92D6855D2002BF41E /* Build configuration list for PBXNativeTarget "Tools-iPadUITests" */;
-			buildPhases = (
-				494410E52D6855D2002BF41E /* Sources */,
-				494410E62D6855D2002BF41E /* Frameworks */,
-				494410E72D6855D2002BF41E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				494410EB2D6855D2002BF41E /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				494410EC2D6855D2002BF41E /* Tools-iPadUITests */,
-			);
-			name = "Tools-iPadUITests";
-			packageProductDependencies = (
-			);
-			productName = "Tools-iPadUITests";
-			productReference = 494410E92D6855D2002BF41E /* Tools-iPadUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -242,14 +187,6 @@
 					};
 					494410CE2D6855D1002BF41E = {
 						CreatedOnToolsVersion = 16.2;
-					};
-					494410DE2D6855D2002BF41E = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 494410CE2D6855D1002BF41E;
-					};
-					494410E82D6855D2002BF41E = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 494410CE2D6855D1002BF41E;
 					};
 				};
 			};
@@ -272,8 +209,6 @@
 			targets = (
 				4914E2952C1AE4E100B370F4 /* Pullscription Tools */,
 				494410CE2D6855D1002BF41E /* Tools On The Go */,
-				494410DE2D6855D2002BF41E /* Tools-iPadTests */,
-				494410E82D6855D2002BF41E /* Tools-iPadUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -283,7 +218,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				494410CA2D685365002BF41E /* Info.plist in Resources */,
 				4914E2A12C1AE4E300B370F4 /* Preview Assets.xcassets in Resources */,
 				4914E29E2C1AE4E300B370F4 /* Assets.xcassets in Resources */,
 			);
@@ -293,20 +227,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		494410DD2D6855D2002BF41E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		494410E72D6855D2002BF41E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				494411112D6925CA002BF41E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,9 +238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4914E29C2C1AE4E100B370F4 /* MainAppView.swift in Sources */,
 				49C643852C1FBC00005153DB /* CheckForUpdates.swift in Sources */,
-				4994E99B2CCC912D00D3CBB7 /* BusinessLogic.swift in Sources */,
 				4914E29A2C1AE4E100B370F4 /* Pullscription_ToolsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,34 +250,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		494410DB2D6855D2002BF41E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		494410E52D6855D2002BF41E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		494410E12D6855D2002BF41E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 494410CE2D6855D1002BF41E /* Tools On The Go */;
-			targetProxy = 494410E02D6855D2002BF41E /* PBXContainerItemProxy */;
-		};
-		494410EB2D6855D2002BF41E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 494410CE2D6855D1002BF41E /* Tools On The Go */;
-			targetProxy = 494410EA2D6855D2002BF41E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4914E2A32C1AE4E300B370F4 /* Debug */ = {
@@ -413,7 +305,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Pullscription Tools/Info.plist";
+				INFOPLIST_FILE = "Tools-iPad/Info.plist";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -472,7 +364,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Pullscription Tools/Info.plist";
+				INFOPLIST_FILE = "Pullscription Tools/Pullscription Tools/Info.plist";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -498,7 +390,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "Pullscription Tools/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription Tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -531,7 +423,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "Pullscription Tools/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Pullscription Tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -584,7 +476,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				XROS_DEPLOYMENT_TARGET = 2.2;
 			};
 			name = Debug;
@@ -624,99 +516,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				XROS_DEPLOYMENT_TARGET = 2.2;
-			};
-			name = Release;
-		};
-		494410F32D6855D2002BF41E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6NVL3G3XS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pullscription.Tools-iPadTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tools-iPad.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tools-iPad";
-				XROS_DEPLOYMENT_TARGET = 2.2;
-			};
-			name = Debug;
-		};
-		494410F42D6855D2002BF41E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6NVL3G3XS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pullscription.Tools-iPadTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tools-iPad.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tools-iPad";
-				XROS_DEPLOYMENT_TARGET = 2.2;
-			};
-			name = Release;
-		};
-		494410F52D6855D2002BF41E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6NVL3G3XS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pullscription.Tools-iPadUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "Tools-iPad";
-				XROS_DEPLOYMENT_TARGET = 2.2;
-			};
-			name = Debug;
-		};
-		494410F62D6855D2002BF41E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6NVL3G3XS;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pullscription.Tools-iPadUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "Tools-iPad";
+				TARGETED_DEVICE_FAMILY = 2;
 				XROS_DEPLOYMENT_TARGET = 2.2;
 			};
 			name = Release;
@@ -751,24 +551,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		494410F82D6855D2002BF41E /* Build configuration list for PBXNativeTarget "Tools-iPadTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				494410F32D6855D2002BF41E /* Debug */,
-				494410F42D6855D2002BF41E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		494410F92D6855D2002BF41E /* Build configuration list for PBXNativeTarget "Tools-iPadUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				494410F52D6855D2002BF41E /* Debug */,
-				494410F62D6855D2002BF41E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -791,6 +573,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4944110B2D6923E2002BF41E /* PrintingKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */;
+			productName = PrintingKit;
+		};
 		494E59A02C1E14F10014C288 /* PrintingKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */;
