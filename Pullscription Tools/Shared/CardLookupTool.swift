@@ -279,7 +279,7 @@ struct CardLookup: View {
 #endif
                                     }) {
                                         HStack {
-                                            Image(systemName: "doc.on.doc.fill") 
+                                            Image(systemName: "doc.on.doc.fill")
                                                 .font(.title)
                                                 .foregroundColor(.blue)
                                                 .padding(.leading)
@@ -321,11 +321,11 @@ struct CardLookup: View {
                         
                     }
                     //                VStack(alignment: .leading){
-                    //                    
+                    //
                     //                    Text("History:")
                     //                        .font(.headline)
                     //                        .padding(.bottom, 0)
-                    //                    
+                    //
                     //                    VStack(alignment: .leading) {
                     //                        HStack {
                     //                            Text("Date")
@@ -384,7 +384,7 @@ struct CardLookup: View {
         }
         .onAppear(){
             #if os(macOS)
-            resizeWindow(width: 400, height: 300)
+            resizeWindow(width: 900, height: 800)
             #endif
             isWindowVisible = true
             focusedField = .toBeProcessed

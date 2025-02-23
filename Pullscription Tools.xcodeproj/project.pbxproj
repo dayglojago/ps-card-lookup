@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		4914E29A2C1AE4E100B370F4 /* Pullscription_ToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914E2992C1AE4E100B370F4 /* Pullscription_ToolsApp.swift */; };
-		4914E29E2C1AE4E300B370F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		4914E2A12C1AE4E300B370F4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E2A02C1AE4E300B370F4 /* Preview Assets.xcassets */; };
 		4944110C2D6923E2002BF41E /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4944110B2D6923E2002BF41E /* PrintingKit */; };
-		494411112D6925CA002BF41E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
+		4944112C2D6B21E2002BF41E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
+		4944112D2D6B21E2002BF41E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 494E59A02C1E14F10014C288 /* PrintingKit */; };
 		49C643822C1FB4E5005153DB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 49C643812C1FB4E5005153DB /* Sparkle */; };
 		49C643852C1FBC00005153DB /* CheckForUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C643842C1FBC00005153DB /* CheckForUpdates.swift */; };
@@ -40,7 +40,12 @@
 		4944110F2D692456002BF41E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				FilePicker.swift,
+				Shared/DataExport.swift,
 				Shared/MainAppView.swift,
+				Shared/Shipment.swift,
+				Shared/ShipmentCheckIn.swift,
+				Shared/SplitShipment.swift,
 			);
 			target = 4914E2952C1AE4E100B370F4 /* Pullscription Tools */;
 		};
@@ -202,6 +207,7 @@
 			packageReferences = (
 				494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */,
 				49C643802C1FB4E5005153DB /* XCRemoteSwiftPackageReference "Sparkle" */,
+				494411242D6AFF73002BF41E /* XCRemoteSwiftPackageReference "SwiftCSV" */,
 			);
 			productRefGroup = 4914E2972C1AE4E100B370F4 /* Products */;
 			projectDirPath = "";
@@ -218,8 +224,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4944112C2D6B21E2002BF41E /* Assets.xcassets in Resources */,
 				4914E2A12C1AE4E300B370F4 /* Preview Assets.xcassets in Resources */,
-				4914E29E2C1AE4E300B370F4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,7 +233,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				494411112D6925CA002BF41E /* Assets.xcassets in Resources */,
+				4944112D2D6B21E2002BF41E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,6 +560,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		494411242D6AFF73002BF41E /* XCRemoteSwiftPackageReference "SwiftCSV" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftcsv/SwiftCSV";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.0;
+			};
+		};
 		494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielsaidi/PrintingKit.git";
