@@ -10,6 +10,7 @@ import SwiftUI
 struct ShipmentCheckIn: View {
     @State private var selectedFileURL: URL?
     @State private var selectedFiles: [URL] = []
+    @State private var shipments: [ComicSupplierInvoice] = []
     
     var body: some View {
         Text("Shipment Check-In")
@@ -47,6 +48,15 @@ struct ShipmentCheckIn: View {
                     #endif
                 }
                 .buttonStyle(.borderedProminent)
+                Button("Process Invoices") {
+                    Task{
+                        if(shipments.isEmpty){
+                            shipments.append(try DiamondInvoice(csvFile: "20250219.csv"))
+                            shipments.append(try LunarInvoice(csvFile: "lunarinvoice.csv"))
+                            shipments.append(try PRHInvoice(csvFile: "prhinvoice.csv"))
+                        }
+                    }
+                }.buttonStyle(.borderedProminent)
             }
         }
         

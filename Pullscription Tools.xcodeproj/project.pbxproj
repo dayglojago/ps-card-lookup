@@ -12,6 +12,8 @@
 		4944110C2D6923E2002BF41E /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4944110B2D6923E2002BF41E /* PrintingKit */; };
 		4944112C2D6B21E2002BF41E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
 		4944112D2D6B21E2002BF41E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4914E29D2C1AE4E300B370F4 /* Assets.xcassets */; };
+		494411322D6C0B40002BF41E /* SwiftCSV in Frameworks */ = {isa = PBXBuildFile; productRef = 494411312D6C0B40002BF41E /* SwiftCSV */; };
+		494411342D6C0B46002BF41E /* SwiftCSV in Frameworks */ = {isa = PBXBuildFile; productRef = 494411332D6C0B46002BF41E /* SwiftCSV */; };
 		494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */ = {isa = PBXBuildFile; productRef = 494E59A02C1E14F10014C288 /* PrintingKit */; };
 		49C643822C1FB4E5005153DB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 49C643812C1FB4E5005153DB /* Sparkle */; };
 		49C643852C1FBC00005153DB /* CheckForUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C643842C1FBC00005153DB /* CheckForUpdates.swift */; };
@@ -41,8 +43,11 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				FilePicker.swift,
+				Shared/20250219.csv,
 				Shared/DataExport.swift,
+				Shared/lunarinvoice.csv,
 				Shared/MainAppView.swift,
+				Shared/prhinvoice.csv,
 				Shared/Shipment.swift,
 				Shared/ShipmentCheckIn.swift,
 				Shared/SplitShipment.swift,
@@ -61,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				494411342D6C0B46002BF41E /* SwiftCSV in Frameworks */,
 				494E59A12C1E14F10014C288 /* PrintingKit in Frameworks */,
 				49C643822C1FB4E5005153DB /* Sparkle in Frameworks */,
 			);
@@ -71,6 +77,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4944110C2D6923E2002BF41E /* PrintingKit in Frameworks */,
+				494411322D6C0B40002BF41E /* SwiftCSV in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +155,7 @@
 			packageProductDependencies = (
 				494E59A02C1E14F10014C288 /* PrintingKit */,
 				49C643812C1FB4E5005153DB /* Sparkle */,
+				494411332D6C0B46002BF41E /* SwiftCSV */,
 			);
 			productName = "Pullscription Card Lookup";
 			productReference = 4914E2962C1AE4E100B370F4 /* Pullscription Tools.app */;
@@ -172,6 +180,7 @@
 			name = "Tools On The Go";
 			packageProductDependencies = (
 				4944110B2D6923E2002BF41E /* PrintingKit */,
+				494411312D6C0B40002BF41E /* SwiftCSV */,
 			);
 			productName = "Tools-iPad";
 			productReference = 494410CF2D6855D1002BF41E /* Tools On The Go.app */;
@@ -591,6 +600,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 494E599F2C1E14F10014C288 /* XCRemoteSwiftPackageReference "PrintingKit" */;
 			productName = PrintingKit;
+		};
+		494411312D6C0B40002BF41E /* SwiftCSV */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 494411242D6AFF73002BF41E /* XCRemoteSwiftPackageReference "SwiftCSV" */;
+			productName = SwiftCSV;
+		};
+		494411332D6C0B46002BF41E /* SwiftCSV */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 494411242D6AFF73002BF41E /* XCRemoteSwiftPackageReference "SwiftCSV" */;
+			productName = SwiftCSV;
 		};
 		494E59A02C1E14F10014C288 /* PrintingKit */ = {
 			isa = XCSwiftPackageProductDependency;
